@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>作业评改</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <script th:src="@{/laydate/laydate.js}"></script>
+    <![endif]-->
+    <style>
+        .sel_btn{
+            height: 21px;
+            line-height: 21px;
+            padding: 0 11px;
+            background: #c9e2b3;
+            border: 1px #a6e1ec solid;
+            border-radius: 3px;
+            /*color: #fff;*/
+            display: inline-block;
+            text-decoration: none;
+            font-size: 12px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p>
+        <a th:href="@{/notice/listAll/(courseNo=${notice.courseNo},uid=${users.uid})}"  class="active"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a>
+    </p>
+</div>
+<div  style="width: 60%; left: 20%; top: 50px; position: relative">
+            <form th:action="@{/notice/update}" th:object="${notice}" method="post"  class="form-horizontal" role="form">
+                <div class="form-group" style="display: none;">
+                    <label for="nid" class="col-sm-2 control-label">通知Id</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="nid"  name="nid"
+                               th:value="*{nid}">
+                    </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="uid" class="col-sm-2 control-label">教师id</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="uid"  name="uid"
+                               th:value="*{uid}">
+                    </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="courseNo" class="col-sm-2 control-label">课程Id</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="courseNo"  name="courseNo"
+                               th:value="*{courseNo}">
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label for="title" class="col-sm-2 control-label">通知标题</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="title" name="title"
+                               th:value="*{title}" >
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label for="nMessage" class="col-sm-2 control-label">通知内容</label>
+                    <div class="col-sm-10">
+            <textarea  rows="10" cols="60" id="nMessage" name="nMessage"
+                       th:text="*{nMessage}" ></textarea>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label for="start_time" class="col-sm-2 control-label">发布时间</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="start_time" name="startTime">
+                    </div>
+                </div>
+                <div class="form-group" style="display: none">
+                    <input type="text" class="form-control" id="nSum" name="nSum" th:value="*{notice}">
+                </div>
+                <div class="form-group" style="display: none;" >
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="nNum" name="nNum" th:value="*{0}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input  type="submit" value="提交"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </br>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script>
+    laydate.render({
+        elem: '#start_time',
+        type: 'datetime',
+        trigger: 'click',
+        value: new Date() // 指定值
+    });
+</script>
+
+</body>
+</html>

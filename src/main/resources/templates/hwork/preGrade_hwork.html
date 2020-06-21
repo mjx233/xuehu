@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>提交的作业展示</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        table
+        {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+        }
+        table td, table th
+        {
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 30px;
+        }
+        table thead th
+        {
+            background-color: #CCE8EB;
+            width: 100px;
+        }
+        table tr:nth-child(odd)
+        {
+            background: #fff;
+        }
+        table tr:nth-child(even)
+        {
+            background: #F5FAFA;
+        }
+    </style>
+
+</head>
+<body>
+<div>
+    <p>
+        <a  th:href="@{/hworkAnswer/toGrade/(courseNo=${course.courseNo},uid=${users.uid})}" style="color: #01AAED"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a>
+    </p>
+</div>
+<div style="position:relative; left: 40px;top: 40px">
+    <table width="90%" class="table" >
+        <caption>
+            <h2>所有作业</h2>
+        </caption>
+        <thead>
+        <tr>
+            <td>用户名</td>
+            <td>分数</td>
+            <td>操作</td>
+        </tr>
+        <tr th:each="gradeHelper,infoStat:${gradeHelperList}" height="30px">
+            <td th:text="${gradeHelper.uname}"></td>
+            <td th:text="${gradeHelper.totalGrade}"></td>
+            <td><button><a th:href="@{/hworkAnswer/Update/(Suid=${gradeHelper.uid},courseNo=${course.courseNo},hid=${hid},uid=${users.uid})}">查看</a></button></td>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+
+</body>
+</html>

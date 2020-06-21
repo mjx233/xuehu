@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>课程</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+		<!--加载meta IE兼容文件-->
+		<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+	</head>
+	<body>
+	<form th:action="@{/course/listStudy/{uid}(uid=${users.getUid()})}" method="post" >
+		<input style="display: none" type="submit" value="查询"/>
+	</form>
+		<div class="album-content w1000 layer-photos-demo" id="layer-photos-demo">
+				<div class="img-list">
+					<div  class="layui-fluid" style="padding:0 ;width: 100%">
+						<div  class="layui-row layui-col-space30 space">
+								<div class="layui-col-xs12 layui-col-sm4 layui-col-md4" th:each="course,iterStat : ${page.list}" stat>
+									<div class="item" style="float: left">
+										<img height="150px" width="200px" th:src="@{/course/getPic/{courseNo}(courseNo=${course.courseNo})}">
+										<div class="cont-text">
+											<a th:href="@{/course/list_zjml/(courseNo=${course.courseNo},uid=${users.uid})}"><p style="color: #01AAED" th:text="${course.cname}"></p></a>
+											<p class="briefly" th:text="${course.teacher}"></p>
+											<p class="briefly" th:text="${course.cMessage}"></p>
+											<p ><a class="update" th:href="@{/course/preUpdate/(courseNo=${course.courseNo},uid=${users.uid})}" style="color: #01AAED" th:if="${course.teacher == users.uname}">修改</a></p>
+											<p ><a th:href="@{/course/remove1/(courseNo=${course.courseNo},uid=${users.uid})}" style="color: #01AAED" th:if="${course.teacher == users.uname}">删除课程</a></p>
+											<p><a th:href="@{/course/remove2/(courseNo=${course.courseNo},uid=${users.uid})}" style="color: #01AAED" th:if="${course.teacher != users.uname}">退选</a></p>
+										</div>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+					<div id="demo"></div>
+		</div>
+
+		<div id="pageInfo" style="text-align: center">
+			共[[${page.total}]]条,
+			<span th:if="${ ( page.pageNum - 1 ) * page.pageSize + 1 == page.total }">
+			当前显示第[[${page.total}]]条,
+			</span>
+			<span th:if="${ ( page.pageNum - 1 ) * page.pageSize + 1 != page.total }">
+			当前显示[[${page.startRow}]]-[[${page.endRow}]]条,
+			</span>
+			第[[${page.pageNum}]]/[[${page.pages}]]页
+			|
+			<a href="#" th:if="${page.pageNum > 1}" ><span class="linkspan" id="one" >首页</span>&nbsp;</a>
+			<a href="#" th:if="${page.pageNum > 1}"><span class="linkspan" id="two">上一页</span>&nbsp;</a>
+			<a href="#" th:if="${page.pageNum < page.pages}" ><span class="linkspan" id="three">下一页</span>&nbsp;</a>
+			<a href="#" th:if="${page.pageNum != page.pages}" th:href="@{/course/listStudy/{uid}(uid=${users.getUid()})}"><span class="linkspan" id="four">末页</span>&nbsp;</a>
+			|
+			到<input type="text" id="pageNo1" size=4 style="text-align:right;" onkeypress="onlynumber();"/> 页
+			<button class="linkspan" id="five" style="color:black;text-decoration:none;"> 跳 转 </button>
+		</div>
+
+
+		<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+		<script th:inline="javascript">
+
+            $(function() {
+                //分页操作
+                $(".linkspan").click(function () {
+
+                    var pageNo = [[${page.pageNum}]];
+                    var totalPageNum = [[${page.pages}]];
+                    var re = /^[0-9]+.?[0-9]*$/;
+                    if (String($(this).attr("id")) == String("one"))
+                        pageNo = 1;
+                    if (String($(this).attr("id")) == String("two"))
+                        pageNo = pageNo - 1;
+                    if (String($(this).attr("id")) == String("three"))
+                        pageNo = pageNo + 1;
+                    if (String($(this).attr("id")) == String("four"))
+                        pageNo = totalPageNum;
+                    if (String($(this).attr("id")) == String("five")) {
+                        var num = $.trim($("#pageNo1").val());
+                        if (!re.test(num)) {
+                            alert("输入的不是数字!");
+                            return;
+                        }
+                        pageNo = parseInt(num);
+                        if (pageNo < 1 || pageNo > totalPageNum) {
+                            alert("页号超出范围，有效范围：[1-" + totalPageNum + "]!");
+                            return;
+                        }
+                    }
+                    var act="?pageNo="+pageNo;
+                    $("form:eq(0)").attr("action",act).submit();
+                    return false;
+                });
+            });
+
+            function role1() {
+                var d1 = document.getElementById("study");
+                alert("sdsds");
+                if ([[${msg}]]==1) {
+                    d1.style.display = "block";
+                }
+            }
+
+
+		</script>
+
+	</body>
+</html>

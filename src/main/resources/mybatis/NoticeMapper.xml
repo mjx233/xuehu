@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.soft.xuehu.mapper.NoticeMapper">
+    <!-- SQL片段 -->
+    <sql id="cols">nid,
+        uid,
+        nMessage,
+        courseNo,
+        title,
+        startTime,
+        nSum,
+        nNum
+    </sql>
+    <!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+    <resultMap type="com.soft.xuehu.entity.Notice" id="noticeRM">
+        <!-- 主键映射 -->
+        <id property="nid" column="nid"/>
+        <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+        <result property="uid" column="uid"/>
+        <result property="nMessage" column="n_message"/>
+        <result property="courseNo" column="course_no"/>
+        <result property="title" column="title"/>
+        <result property="startTime" column="start_time"/>
+        <result property="nSum" column="n_sum"/>
+        <result property="nNum" column="n_num"/>
+    </resultMap>
+
+    <insert id="addNotice" parameterType="com.soft.xuehu.entity.Notice" useGeneratedKeys="true" keyProperty="nid">
+        insert into notice (uid,n_message,course_no,title,start_time,n_sum,n_num) values(#{uid},#{nMessage},#{courseNo},#{title},#{startTime},#{nSum},#{nNum})
+    </insert>
+
+    <select id="selectByNid" resultType="com.soft.xuehu.entity.Notice" parameterType="int" resultMap="noticeRM">
+    select * from notice where nid = #{nid}
+    </select>
+
+    <update id="update" parameterType="com.soft.xuehu.entity.Notice" >
+    update notice set uid = #{uid}, start_time = #{startTime}, n_sum=#{nSum},n_num=#{nNum},course_no = #{courseNo},n_message = #{nMessage},title = #{title} where  nid = #{nid}
+    </update>
+
+    <!-- 删除一份作业 -->
+    <delete id="removeNotice" parameterType="int">
+        delete from notice
+        where nid = #{nid}
+    </delete>
+
+
+    <!--//找出所有课程发布的通知-->
+    <select id="selectAll"  parameterType="string" resultType="com.soft.xuehu.entity.Notice" resultMap="noticeRM">
+        select *
+        from notice
+        where course_no = #{courseNo}
+    </select>
+
+    <!--//找出所有发布的通知-->
+    <select id="select"  resultType="com.soft.xuehu.entity.Notice" resultMap="noticeRM">
+        select *
+        from notice
+        order by course_no
+    </select>
+
+
+</mapper>

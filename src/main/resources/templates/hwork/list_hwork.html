@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>作业展示</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <script th:src="@{/laydate/laydate.js}"></script>
+    <![endif]-->
+    <style>
+        .sel_btn{
+            height: 21px;
+            line-height: 21px;
+            padding: 0 11px;
+            background: #c9e2b3;
+            border: 1px #a6e1ec solid;
+            border-radius: 3px;
+            /*color: #fff;*/
+            display: inline-block;
+            text-decoration: none;
+            font-size: 12px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p>
+        <a  th:href="@{/course/list_zjml/(courseNo=${course.courseNo},uid=${users.uid})}" style="color: #01AAED"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a>
+    </p>
+</div>
+<div style="left: 30%; position: relative" th:if="${course.teacher == users.uname}">
+    <button style="color: #a6e1ec"><a th:href="@{/hwork/toAdd/(courseNo=${course.courseNo},uid=${users.uid})}" class="active">上传作业</a>&nbsp;&nbsp;&nbsp;</button>
+    &nbsp;<button style="color: #a6e1ec"><a th:href="@{/hworkAnswer/toGrade/(courseNo=${course.courseNo},uid=${users.uid})}" class="active">评改作业</a>&nbsp;&nbsp;&nbsp;</button>
+</div>
+<div class="album-content w1000 layer-photos-demo" id="layer-photos-demo">
+    <div class="img-list">
+        <div  class="layui-fluid" style="padding:0 ;width: 100%">
+            <div  class="layui-row layui-col-space30 space">
+                <div class="layui-col-xs12 layui-col-sm4 layui-col-md4"  th:each="hwork,iterStat : ${hworkList}" stat>
+                    <div class="item" style="height:150px;width:280px;border:1px solid #9F9F9F">
+                        <div class="cont-text" style="height: 80%">
+                            <p th:text="${hwork.gethMessage()}" style="font-size: 20px; font-weight: bold; "></p>
+                            <br>
+                            <p  th:text="'截止时间：'+${#dates.format(hwork.finishTime, 'yyyy-MM-dd HH:mm:ss')}" id="finishTime"></p>
+                            <br>
+                            <p th:text="'开始时间：'+${#dates.format(hwork.startTime, 'yyyy-MM-dd HH:mm:ss')}" id="startTime"></p>
+                        </div>
+     <!--教师查看  -->                 <div th:if="${hwork.finishTime>Date and course.teacher==users.uname}" style="background-color:#c9e2b3 ;height: 20%;"><a class="sel_btn" th:href="@{/hworkQuestion/list/(courseNo=${hwork.courseNo},hid=${hwork.hid},uid=${users.uid})}">查看</a></div>
+     <!--学生填写 -->                  <div th:if="${hwork.finishTime>Date and course.teacher!=users.uname}" style="background-color:#c9e2b3 ;height: 20%;"><a class="sel_btn" th:href="@{/hworkAnswer/list/(courseNo=${hwork.courseNo},hid=${hwork.hid},uid=${users.uid})}">查看</a></div>
+                        <div th:if="${hwork.finishTime<=Date}" style="background-color:#c9e2b3 ;height: 20%;"><a class="sel_btn" th:href="@{/hworkQuestion/list_hworkTeach}">已过期</a></div>
+                        <div th:if="${hwork.uid==users.uid}" style="background-color:#c9e2b3 ;height: 20%;"><a class="sel_btn" th:href="@{/hwork/remove/(hid=${hwork.hid},uid=${users.uid},courseNo=${hwork.courseNo})}">删除</a></div>
+                        <div th:if="${hwork.uid==users.uid}" style="background-color:#c9e2b3 ;height: 20%;"><a class="sel_btn" th:href="@{/hwork/toUpdate/(hid=${hwork.hid},uid=${users.uid})}">修改</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="demo"></div>
+</div>
+
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script>
+    function dateFormatter(date){
+        //Object对象转为日期格式
+        var date=new Date(date);
+        var strDate = date.getFullYear()+"-";
+        var month=date.getMonth()+1;
+        var day=date.getDate();
+        var hours=date.getHours();
+        var minutes=date.getMinutes();
+        var seconds=date.getSeconds();
+        //格式化日期,月日时分秒保持两位
+        strDate=strDate+(month>8?month:"0"+month)+"-"
+            +(day>9?day:"0"+day)+"&nbsp"
+            +(hours>9?hours:"0"+hours)+":"
+            +(minutes>9?minutes:"0"+minutes)+":"
+            +(seconds>9?seconds:"0"+seconds)
+        return strDate ;
+    }
+</script>
+
+</body>
+</html>

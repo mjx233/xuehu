@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>上传章节目录excel</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<p><a th:href="@{/course/list_zjml/(courseNo=${courseNo},uid=${uid})}" style="color: #01AAED"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a></p>
+<br/>
+<br/>
+<h1>导入EXCEL</h1>
+<br/>
+
+<form class="form-horizontal" id="form_table" th:action="@{/course/import}" enctype="multipart/form-data" method="post">
+    <button type="submit" class="btn btn-primary">导入</button>
+    <input class="form-input" type="file" name="filename"></input>
+</form>
+</body>
+</html>

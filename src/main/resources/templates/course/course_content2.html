@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>课程</title>
+</head>
+<body>
+<!--<button οnclick="playorpause()">播放/暂停</button>
+<button οnclick="closeVoice()">静音/取消静音</button>
+<input type="range" id="volume" min="0" max="100" value="20" οnchange="changeVolume(this)">
+<button οnclick="changeScreen()">全屏/退出全屏</button>-->
+<br>
+<div style="text-align: center">
+    <video id="video" width="600" height="360" preload controls >
+        <source th:src="@{/Path/{video}(video=${course.video}) }" type="video/mp4" />
+        <source th:src="@{/Path/{video}(video=${course.video}) }" type="video/ogg" />
+    </video>
+</div>
+<div th:if="${course.uid == uid }" style="text-align: center">
+    <form method="post" th:action="@{/uploadFile/(cid=${course.cid},uid=${uid})}" enctype="multipart/form-data">
+        <input type="file" name="uploadFile" multiple>
+        <input type="submit" value="上传">
+    </form>
+    <button> <a class="fr"  th:href="@{/course/removeVideo/(cid=${course.cid},uid=${uid})}">删除</a></button>
+</div>
+<div style="width: 500px; display: none">
+    <label id="startTimeLabel">0:00</label>
+    <input type="range" id="progressBar" min="0" max="100" style="width: 80%" οnchange="changeProgress(this)" value="0">
+    <label id="totalTimeLabel"></label>
+</div>
+<script type="text/javascript">
+    var myVideo = document.querySelector("#myVideo");
+    //播放或暂停
+    function playorpause(){
+        if(myVideo.paused){
+            myVideo.play();
+        }else{
+            myVideo.pause();
+        }
+    }
+    //设置静音和取消静音
+    function closeVoice(){
+        myVideo.muted = !myVideo.muted;
+    }
+    //改变声音大小
+    function changeVolume(obj){
+        myVideo.volume = obj.value/100;
+        console.log(myVideo.volume);
+    }
+    //全屏
+    function goFullScreen() {
+        element = document.getElementById('myVideo');
+        if (element.requestFullscreen) { //w3c
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) { //moz Firefox
+            element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) { //IE
+            element.msRequestFullscreen();
+        } else if (element.oRequestFullscreen) { //Opera
+            element.oRequestFullscreen();
+        } else if (element.webkitRequestFullscreen) { //webkit内核 Chrome Safari
+            element.webkitRequestFullScreen();
+        } else {
+            var docHtml = document.documentElement;
+            var docBody = document.body;
+            var cssText = 'width:100%;height:100%;overflow:hidden;';
+            docHtml.style.cssText = cssText;
+            docBody.style.cssText = cssText;
+            element.style.cssText = cssText + ';' + 'margin:0px;padding:0px;';
+            document.IsFullScreen = true;
+        }
+    }
+    //退出全屏
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.oCancelFullScreen) {
+            document.oCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else {
+            var docHtml = document.documentElement;
+            var docBody = document.body;
+            var videobox = document.getElementById('videobox');
+            docHtml.style.cssText = "";
+            docBody.style.cssText = "";
+            videobox.style.cssText = "";
+            document.IsFullScreen = false;
+        }
+    }
+    //判断是否全屏
+    function isFullScreen(){
+        return  document.fullscreen ||
+            document.msFullscreenElement ||
+            document.msFullscreenElement ||
+            document.mozFullScreen ||
+            document.oFullScreen ||
+            document.webkitIsFullScreen;
+    }
+
+    function changeScreen(){
+        console.log(document.webkitIsFullScreen);
+        if(isFullScreen()){
+            exitFullscreen();
+        }else{
+            goFullScreen();
+        }
+
+    }
+
+    function changeProgress(obj){
+        console.log(obj.value);
+        var time = myVideo.duration*(obj.value/100);
+        myVideo.currentTime =  time;
+        console.log(time);
+
+    }
+
+    myVideo.addEventListener("timeupdate",function(){
+        var pValue = (myVideo.currentTime/myVideo.duration)*100;
+        document.querySelector('#progressBar').value = pValue;
+    });
+
+    myVideo.addEventListener("ended",function(){
+        myVideo.currentTime = 0;
+        myVideo.pause();
+    });
+
+    myVideo.addEventListener("loadedmetadata",function(){
+        document.querySelector('#totalTimeLabel').innerText = getTimeBySecond(myVideo.duration);
+    });
+
+
+    function getTimeBySecond(second){
+        var hour = parseInt(second / (60* 60));
+        var minute = parseInt((second/60) % 60);
+        var second = parseInt(second % 60);
+        return (hour > 0 ?((hour < 10 ? "0" + hour:hour) + ":") : "") + (minute < 10 ? "0" + minute:minute) + ":" + (second < 10 ? "0" + second:second);
+    }
+
+</script>
+</body>
+</html>

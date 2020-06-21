@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.soft.xuehu.mapper.HworkMapper">
+    <!-- SQL片段 -->
+    <sql id="cols">hid,
+        uid,
+        hMessage,
+        courseNo,
+        hNum,
+        startTime,
+        finishTime
+    </sql>
+    <!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+    <resultMap type="com.soft.xuehu.entity.Hwork" id="hworkRM">
+        <!-- 主键映射 -->
+        <id property="hid" column="hid"/>
+        <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+        <result property="uid" column="uid"/>
+        <result property="hMessage" column="h_message"/>
+        <result property="courseNo" column="course_no"/>
+        <result property="hNum" column="hnum"/>
+        <result property="startTime" column="start_time"/>
+        <result property="finishTime" column="finish_time"/>
+    </resultMap>
+
+
+    <insert id="addHwork" parameterType="com.soft.xuehu.entity.Hwork" useGeneratedKeys="true" keyProperty="hid">
+        insert into hwork(uid,h_message,course_no,hnum,start_time,finish_time) values(#{uid},#{hMessage},#{courseNo},#{hNum},#{startTime},#{finishTime})
+    </insert>
+
+    <select id="selectHwork" resultType="java.lang.Integer" parameterType="string">
+    select count(*) from hwork where hnum =#{arg0} and uid = #{arg1}
+    </select>
+    <update id="updateHwork" parameterType="com.soft.xuehu.entity.Hwork" >
+    update hwork set course_no = #{courseNo},h_message = #{hMessage}, start_time = #{startTime},finish_time= #{finishTime} where hnum =#{hNum}, uid = #{uid}
+    </update>
+
+    <update id="update" parameterType="com.soft.xuehu.entity.Hwork" >
+
+        update hwork
+        <set>
+            <if test="courseNo!=null">course_no=#{courseNo},</if>
+            <if test="hMessage!=null">h_message=#{hMessage},</if>
+            <if test="startTime!=null">start_time=#{startTime},</if>
+            <if test="finishTime!=null">finish_time=#{finishTime},</if>
+            <if test="hNum!=null">hnum=#{hNum},</if>
+            <if test="uid!=null">uid=#{uid},</if>
+        </set>
+        where hid = #{hid}
+</update>
+
+    <!-- 查询课程作业 -->
+    <select id="selectBycourseNo"  parameterType="string" resultType="com.soft.xuehu.entity.Hwork" resultMap="hworkRM">
+        select *
+        from hwork
+        where course_no = #{courseNo}
+    </select>
+
+
+    <!-- 查询一共多少份作业 -->
+    <select id="selectNum" resultType="java.lang.Integer" parameterType="string">
+      select count(*) from hwork where course_no =#{arg0} and uid = #{arg1}
+    </select>
+
+
+    <!-- 删除一份作业 -->
+    <delete id="removeHwork" parameterType="int">
+        delete from hwork
+        where hid = #{hid}
+    </delete>
+
+    <!-- 查询一个，按主键查询 -->
+    <select id="selectByHid" parameterType="int" resultType="com.soft.xuehu.entity.Hwork" resultMap="hworkRM">
+        select *
+        from hwork
+        where hid = #{hid}
+    </select>
+
+    <!-- 查询课程作业 -->
+    <select id="select"  resultType="com.soft.xuehu.entity.Hwork" resultMap="hworkRM">
+        select *
+        from hwork
+        order by course_no
+    </select>
+
+
+</mapper>

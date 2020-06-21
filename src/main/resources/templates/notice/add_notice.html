@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>上传通知</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <script th:src="@{/laydate/laydate.js}"></script>
+</head>
+
+<body>
+<div>
+    <p>
+        <a  th:href="@{/notice/listAll/(courseNo=${notice.courseNo},uid=${notice.uid})}" style="color: #01AAED"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a>
+    </p>
+</div>
+
+<div style="position: relative;left: 100px;top: 100px">
+    <form th:action="@{/notice/add}" th:object="${notice}"method="post"  class="form-horizontal" role="form">
+        <div class="form-group" style="display: none;">
+            <label for="u_id" class="col-sm-2 control-label">用户ID</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="u_id"  name="uid"
+                       th:value="*{uid}">
+            </div>
+        </div>
+        <div class="form-group" >
+            <label for="courseNo" class="col-sm-2 control-label">课程id</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="courseNo" name="courseNo"
+                       th:value="*{courseNo}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">通知标题</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="title" name="title"
+                       placeholder="请输入通知标题">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nMessage" class="col-sm-2 control-label">通知内容</label>
+            <div class="col-sm-10">
+            <textarea  rows="10" cols="60" id="nMessage" name="nMessage"
+                       placeholder="请输入通知" ></textarea>
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="start_time" class="col-sm-2 control-label">发布时间</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="start_time" name="startTime">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="nSum" class="col-sm-2 control-label">总人数</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="nSum" name="nSum"
+                       th:value="*{nSum}">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="nNum" class="col-sm-2 control-label">nNum</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="nNum" name="nNum"
+                       th:value="*{nNum}">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input  type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script>
+    laydate.render({
+        elem: '#finish_time',
+        type: 'datetime',
+        trigger: 'click'
+    });
+    laydate.render({
+        elem: '#start_time',
+        type: 'datetime',
+        trigger: 'click',
+        value: new Date() // 指定值
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增课程</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body style="padding:8px;">
+<h3 class="title">新增课程</h3>
+<div style="float: left;width: 70%">
+    <form th:action="@{/course/add}" method="post"  enctype="multipart/form-data" th:object="${course}">
+        <div class="form-group">
+            <label for="cname" class="col-sm-2 control-label">课程名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="cname"  name="cname"
+                       placeholder="请输入课程名">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="zj" class="col-sm-2 control-label">章节</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="zj" name="zj"
+                       th:value="0">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="ml" class="col-sm-2 control-label">目录</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="ml" name="ml"
+                       th:value="0">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="cMessage" class="col-sm-2 control-label">课程简介</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="cMessage" name="cMessage"
+                       placeholder="请输入课程简介">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="video" class="col-sm-2 control-label">视频</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="video" name="video">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="zjMessage" class="col-sm-2 control-label">章节内容</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="zjMessage" name="zjMessage">
+            </div>
+        </div>
+        <div class="form-group" style="display: none">
+            <label for="mlMessage" class="col-sm-2 control-label">目录内容</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="mlMessage" name="mlMessage">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="teacher" class="col-sm-2 control-label">教师名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="teacher" name="teacher"
+                       th:value="*{teacher}">
+            </div>
+        </div>
+        <div class="form-group" STYLE="display: none">
+            <label for="courseNo" class="col-sm-2 control-label">课程编号</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="courseNo" name="courseNo">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="pic1" class="col-sm-2 control-label">课程图片</label>
+            <div class="col-sm-10">
+                <input type="file" class="form-control" id="pic1" name="pic1" size="40">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="uid" class="col-sm-2 control-label">用户id</label>
+            <div class="col-sm-10">
+                <input type="text"  class="form-control" id="uid" name="uid" size="40" th:value="${users.uid}">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input  type="submit" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div style="float: left;width: 30%">
+    <img id="textbookPic"
+         alt="默认课程封面"
+         width="250"
+         height="200"
+         th:src="@{/img/default.jpg}" /><br/>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    $(function() {
+        $("#pic1").change(function (e) {
+            for (var i = 0; i < e.target.files.length; i++) {
+                var file = e.target.files.item(i);
+                var freader = new FileReader();
+                freader.readAsDataURL(file);
+                freader.onload = function (e) {
+                    var src = e.target.result;
+                    $("#textbookPic").attr("src", src);
+                }
+            }
+        });
+    });
+
+
+</script>
+</html>

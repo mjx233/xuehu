@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:white-space="http://www.w3.org/1999/xhtml"
+      xmlns:min-width="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>用户</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/admin-all.css}">
+    <script type="text/javascript" th:src="@{/js/admin/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/jquery-ui-1.8.22.custom.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/ui-lightness/jquery-ui-1.8.22.custom.css}">
+    <script type="text/javascript">
+        $(function () {
+            $('#center').hide();
+            $('#bottom').hide();
+            $('.top-next').click(function () {
+                $('#top').hide();
+                $('#center').show();
+            })
+            $('.center-next').click(function () {
+                $('#center').hide();
+                $('#bottom').show();
+            })
+            $('.center-prev').click(function () {
+                $('#center').hide();
+                $('#top').show();
+            })
+            $('.bottom-prev').click(function () {
+                $('#bottom').hide();
+                $('#center').show();
+            })
+        })
+    </script>
+    <style type="text/css">
+        .auto-style1 {
+            height: 26px;
+        }
+    </style>
+    <style>
+        .black{
+            border:1px solid #333;
+            box-shadow: 0 1px 2px #8b8b8b inset,0 -1px 0 #3d3d3d inset,0 -2px 3px #8b8b8b inset;
+            background: -webkit-linear-gradient(top,#656565,#4c4c4c);
+            background: -moz-linear-gradient(top,#656565,#4a4a4a);
+            background: linear-gradient(top,#656565,#4a4a4a);
+        }
+    </style>
+</head>
+<div id="queryArea" style=" position:relative; left: 30px; top: 10px; ">
+    <form th:action="@{/notice/listStu}" method="post" th:object="${uid}">
+        用户编号：<input type="text" name="uid" />&nbsp;&nbsp;
+        <input type="submit" value="查询"/>
+    </form>
+</div>
+<body>
+<div class="alert alert-info">当前位置<b class="tip"></b>用户管理</div>
+<table class="table table-striped table-bordered table-condensed" id="top">
+    <thead>
+    <tr class="tr_detail">
+        <th>用户账号</th>
+        <th>用户名</th>
+        <th>课程号</th>
+        <th>课程名</th>
+        <th>教师名</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="even" th:each="cnameHelper,iterStat : ${cnameHelperList}" stat>
+        <td th:text="${cnameHelper.cusers.users.uid}"></td>
+        <td th:text="${cnameHelper.cusers.users.uname}"></td>
+        <td th:text="${cnameHelper.cusers.courseNo}"></td>
+        <td th:text="${cnameHelper.cname}"></td>
+        <td th:text="${cnameHelper.teacher}"></td>
+        <td>
+            <p ><a th:href="@{/course/list_zjml/(courseNo=${cnameHelper.cusers.courseNo},uid=${cnameHelper.cusers.users.uid})}" class="delete"  style="color: #01AAED" target="Conframe" >查看</a></p>
+            <p ><a th:href="@{/course/remove3/(courseNo=${cnameHelper.cusers.courseNo},uid=${cnameHelper.cusers.users.uid})}" class="delete"  style="color: #01AAED" >退选</a></p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

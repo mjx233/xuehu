@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.soft.xuehu.mapper.CourseMapper">
+    <!-- SQL片段 -->
+    <sql id="cols">cid,
+        cname,
+        zj,
+        ml,
+        cMessage,
+        video,
+        zjMessage,
+        mlMessage,
+        teacher,
+        courseNo,
+        pic,
+        uid
+</sql>
+    <!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+    <resultMap type="com.soft.xuehu.entity.Course" id="courseRM">
+        <!-- 主键映射 -->
+        <id property="cid" column="cid"/>
+        <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+        <result property="cname" column="cname"/>
+        <result property="zj" column="zj"/>
+        <result property="ml" column="ml"/>
+        <result property="cMessage" column="c_message"/>
+        <result property="video" column="video"/>
+        <result property="zjMessage" column="zj_message"/>
+        <result property="mlMessage" column="ml_message"/>
+        <result property="teacher" column="teacher"/>
+        <result property="courseNo" column="course_no"/>
+        <result property="pic" column="pic"/>
+        <result property="uid" column="uid"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="addCourse" parameterType="com.soft.xuehu.entity.Course" useGeneratedKeys="true" keyProperty="cid">
+        insert into course
+        (cname,zj,ml,c_message,video,zj_message,ml_message,teacher,course_no,pic,uid)
+        values
+        (#{cname},#{zj},
+        #{ml},#{cMessage},#{video},#{zjMessage},#{mlMessage},
+        #{teacher},#{courseNo},#{pic,jdbcType=BLOB},#{uid})
+    </insert>
+    <!-- 退选 -->
+    <delete id="removeCourse" parameterType="string">
+        delete from course
+        where course_no = #{courseNo}
+    </delete>
+
+    <!-- 删除一个章节目录 -->
+    <delete id="removeZjml" >
+        delete from course
+        where course_no = #{arg0} and zj = #{arg1} and ml = #{arg2}
+    </delete>
+
+
+    <!-- 修改 -->
+    <update id="updateCourse" parameterType="com.soft.xuehu.entity.Course" >
+        update course
+        <set>
+            <if test="cid!=null">cid=#{cid},</if>
+            <if test="cname!=null">cname=#{cname},</if>
+            <if test="zj!=null">zj=#{zj},</if>
+            <if test="ml!=null">ml=#{ml},</if>
+            <if test="zjMessage!=null">zj_message=#{zjMessage},</if>
+            <if test="mlMessage!=null">ml_message=#{mlMessage},</if>
+            <if test="cMessage!=null">c_message=#{cMessage},</if>
+            <if test="video!=null">video=#{video},</if>
+            <if test="pic!=null">pic=#{pic,jdbcType=BLOB},</if>
+            <if test="teacher!=null">teacher=#{teacher},</if>
+            <if test="courseNo!=null">course_no=#{courseNo},</if>
+            <if test="uid!=null">uid=#{uid},</if>
+        </set>
+        where cid = #{cid}
+    </update>
+
+    <!-- 修改 -->
+    <update id="updateZjml" parameterType="com.soft.xuehu.entity.Course" >
+        update course
+        <set>
+            <if test="cid!=null">cid=#{cid},</if>
+            <if test="cname!=null">cname=#{cname},</if>
+            <if test="zj!=null">zj=#{zj},</if>
+            <if test="ml!=null">ml=#{ml},</if>
+            <if test="zjMessage!=null">zj_message=#{zjMessage},</if>
+            <if test="mlMessage!=null">ml_message=#{mlMessage},</if>
+            <if test="cMessage!=null">c_message=#{cMessage},</if>
+            <if test="video!=null">video=#{video},</if>
+            <if test="pic!=null">pic=#{pic,jdbcType=BLOB},</if>
+            <if test="teacher!=null">teacher=#{teacher},</if>
+            <if test="courseNo!=null">course_no=#{courseNo},</if>
+            <if test="uid!=null">uid=#{uid},</if>
+        </set>
+        where zj = #{zj} and ml = #{ml} and course_no = #{courseNo}
+    </update>
+
+    <!-- 查询一个，按主键查询 -->
+    <select id="loadCourseByCourseNo" parameterType="string" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where course_no = #{courseNo} and zj = 0
+    </select>
+
+    <!-- //根据课程编号、章节目录获取一条课程记录-->
+    <select id="loadCourse"  resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where course_no = #{arg0} and zj = #{arg1} and ml = #{arg2}
+    </select>
+
+    <!-- //根据课程编号、章节目录获取课程条数-->
+    <select id="loadCourse1"  resultType="java.lang.Integer">
+        select count(*)
+        from course
+        where course_no = #{arg0} and zj = #{arg1} and ml = #{arg2}
+    </select>
+
+    <!-- 查询一节课程内容 -->
+    <select id="selectMl"  parameterType="int" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where cid = #{cid}
+    </select>
+
+
+    <!-- 顺序排列章节目录  -->
+    <select id="loadSortCourses" parameterType="string" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select * from course
+        where course_no = #{courseNo} and zj!=0
+        order by zj ASC,ml ASC
+    </select>
+
+
+    <!-- 带分页查询，注意Mybatis中如果有填写集合类型，只填写集合中元素的类型  -->
+    <select id="loadAll" parameterType="map" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select * from course
+        <where>
+            1=1
+            <if test="qryCname!=null">and cname like concat('%', #{qryCname}, '%')</if>
+            <if test="qryTeacher!=null">and teacher like concat('%', #{qryTeacher}, '%')</if>
+            <if test="qryCourseNo!=null and qryCourseNo!='' ">and course_no = #{qryCourseNo}</if>
+        </where>
+        and zj = 0
+        order by course_no
+    </select>
+
+    <!-- 查询用户所有课程 -->
+    <select id="loadStudy" parameterType="list" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where
+        <if test='list!=null and list.size() > 0'>
+            <foreach collection="list" index="index" item="cuserlist" open="(" close=")" separator="or">
+                ( `course_no`=#{cuserlist.courseNo} and `teacher`!=#{cuserlist.users.uname})
+            </foreach>
+            and zj=0
+        </if>
+    </select>
+
+    <!-- 查询教师所教课程 -->
+    <select id="loadTeach" parameterType="list" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where
+        <if test='list!=null and list.size() > 0'>
+            <foreach collection="list" index="index" item="cuserlist" open="(" close=")" separator="or">
+                ( `course_no`=#{cuserlist.courseNo} and `teacher`=#{cuserlist.users.uname})
+            </foreach>
+            and zj=0
+        </if>
+    </select>
+
+
+    <!-- 查询教师所教课程 -->
+    <select id="loadByUid" parameterType="string" resultType="com.soft.xuehu.entity.Course" resultMap="courseRM">
+        select *
+        from course
+        where
+        uid = #{uid}
+    </select>
+
+    <!-- 删除教师所教课程 -->
+    <delete id="remove" parameterType="string">
+        delete from course
+        where uid = #{uid}
+    </delete>
+
+
+</mapper>

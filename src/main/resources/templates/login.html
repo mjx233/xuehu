@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录注册页面</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+    <style>
+        .code
+        {
+            font-family:Arial;
+            font-style:italic;
+            color:blue;
+            font-size:30px;
+            border:0;
+            padding:2px 3px;
+            letter-spacing:3px;
+            font-weight:bolder;
+            float:left;
+            cursor:pointer;
+            width:150px;
+            height:50px;
+            line-height:60px;
+            text-align:center;
+            vertical-align:middle;
+            background-color:#D8B7E3;
+        }
+        span {
+            text-decoration:none;
+            font-size:12px;
+            color:#288bc4;
+            padding-left:10px;
+        }
+
+        span:hover {
+            text-decoration:underline;
+            cursor:pointer;
+        }
+
+    </style>
+
+</head>
+
+<body style="background-image: url('../img/bg.png');" onload="tishi()">
+
+<div class="materialContainer">
+    <form th:action="@{/security/login}" method="post" th:object="${login}">
+        <div class="box">
+            <div class="title">登录</div>
+            <div class="input">
+                <label for="uid">用户id</label>
+                <input type="text" name="uid" id="uid" th:value="*{uid}">
+                <span class="spin"></span>
+            </div>
+            <div class="input">
+                <label for="psw">密码</label>
+                <input type="password" name="psw" id="psw" th:value="*{psw}">
+                <span class="spin"></span>
+            </div>
+
+            <div class="input">
+                <div id="checkCode"  onclick="createCode(4)" ></div>
+                <span onclick="createCode(4)">看不清换一张</span>
+            </div>
+            <div class="input">
+                验证码：
+                <input type="text" id="inputCode"  style="float:left;"/>
+            </div>
+            <div style="display: none;">
+                <input type="text" id="TorF" name="TorF">
+            </div>
+
+            <div class="button login">
+                <button onclick="validateCode()">
+                    <span>登录</span>
+                    <i class="fa fa-check"></i>
+                </button>
+            </div>
+            <a href="javascript:" class="pass-forgot">忘记密码？</a>
+        </div>
+    </form>
+
+    <form th:action="@{/security/zhuce}" method="post" th:object="${users}">
+        <div class="overbox">
+            <div class="material-button alt-2">
+                <span class="shape"></span>
+            </div>
+            <div class="title">注册</div>
+            <div class="input">
+                <label for="uid1">用户id</label>
+                <input type="text" name="uid" id="uid1">
+                <span class="spin"></span>
+            </div>
+            <div class="input">
+                <label for="psw1">密码</label>
+                <input type="psw" name="psw" id="psw1">
+                <span class="spin"></span>
+            </div>
+            <!--                <div class="input">
+                                <label for="reregpass">确认密码</label>
+                                <input type="password" name="reregpass" id="reregpass">
+                                <span class="spin"></span>
+                            </div>-->
+            <div class="input">
+                <label for="uname">用户名</label>
+                <input type="uname" name="uname" id="uname">
+                <span class="spin"></span>
+            </div>
+            <!--               <div class="input">-->
+            <!--                    <label for="role">身份</label>-->
+            <div class="input">
+                <select id="role" name="role" style="height: 30px;color: #FD482C">
+                    <option value=1>教师</option>
+                    <option value=0>学生</option>
+                </select>
+                <!--                    <span class="spin"></span>
+                                </div>-->
+            </div>
+            <div class="button">
+                <button>
+                    <span>注册</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
+<script  th:inline="javascript">
+    //页面加载时，生成随机验证码
+    window.onload=function(){
+        createCode(4);
+
+        /*    0:无事发生
+            1：账号重复注册
+            2：用户名已注册！
+            3:注册成功！
+            4:账号未注册！
+            5：密码错误！
+        */
+        if([[${flag}]]==1){
+            alert("账号重复注册");
+        }
+        else if([[${flag}]]==2){
+            alert("用户名已注册！");
+        }
+        else if([[${flag}]]==3){
+            alert("注册成功！");
+        }
+        else if([[${flag}]]=="4"){
+            alert("账号未注册！");
+        }
+        else if([[${flag}]]=="5"){
+            alert("密码错误！");
+        }
+    }
+    //生成验证码的方法
+    function createCode(length) {
+        var code = "";
+        var codeLength = parseInt(length); //验证码的长度
+        var checkCode = document.getElementById("checkCode");
+        ////所有候选组成验证码的字符，当然也可以用中文的
+        var codeChars = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        //循环组成验证码的字符串
+        for (var i = 0; i < codeLength; i++)
+        {
+            //获取随机验证码下标
+            var charNum = Math.floor(Math.random() * 62);
+            //组合成指定字符验证码
+            code += codeChars[charNum];
+        }
+        console.log(code);
+        //为验证码区域添加样式名
+        checkCode.className = "code";
+        //将生成验证码赋值到显示区
+        checkCode.innerHTML = '';
+        checkCode.innerHTML = checkCode.innerHTML+code;
+    }
+
+    //检查验证码是否正确
+    function validateCode()
+    {
+        //获取显示区生成的验证码
+        var checkCode = document.getElementById("checkCode").innerHTML;
+        //获取输入的验证码
+        var inputCode = document.getElementById("inputCode").value;
+        //console.log(checkCode);
+        //console.log(inputCode);
+        if (inputCode.length <= 0)
+        {
+            alert("请输入验证码！");
+            var TorF = document.getElementById("TorF");
+            TorF.value = 0;
+        }
+        else if (inputCode.toUpperCase() != checkCode.toUpperCase())
+        {
+            alert("验证码输入有误！");
+            var TorF = document.getElementById("TorF");
+            TorF.value = 0;
+        }
+        else
+        {
+            var TorF = document.getElementById("TorF");
+            TorF.value = 1;
+        }
+    }
+</script>
+</body>
+
+</html>

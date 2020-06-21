@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>课程菜单</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/course.css}">
+<!--    &lt;!&ndash;加载meta IE兼容文件&ndash;&gt;
+    &lt;!&ndash;[if lt IE 9]>-->
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+
+    <!--防止iframe出现下拉进度条-->
+    <script  th:inline="javascript">
+        var getFFVersion = navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1]
+        //extra height in px to add to iframe in FireFox 1.0+ browsers
+        var FFextraWidth = getFFVersion >= 0.1 ? 16 : 0
+        var FFextraHeight = getFFVersion >= 0.1 ? 16 : 0
+
+        function dyniframesizeWidth(iframename) {
+            var pTar = null;
+            if (document.getElementById) {
+                pTar = document.getElementById(iframename);
+            } else {
+                eval('pTar = ' + iframename + ';');
+            }
+            if (pTar && !window.opera) {
+                //begin resizing iframe
+                pTar.style.display = "block"
+
+                if (pTar.contentDocument && pTar.contentDocument.body.offsetWidth) {
+                    //ns6 syntax
+                    pTar.width = pTar.contentDocument.body.offsetWidth + FFextraWidth;
+                } else if (pTar.Document && pTar.Document.body.scrollWidth) {
+                    //ie5+ syntax
+                    pTar.width = pTar.Document.body.scrollWidth;
+                }
+            }
+        }
+
+        function dyniframesizeHeight(iframename) {
+            var pTar = null;
+            if (document.getElementById) {
+                pTar = document.getElementById(iframename);
+            } else {
+                eval('pTar = ' + iframename + ';');
+            }
+            if (pTar && !window.opera) {
+                //begin resizing iframe
+                pTar.style.display = "block"
+
+                if (pTar.contentDocument && pTar.contentDocument.body.offsetHeight) {
+                    //ns6 syntax
+                    pTar.height = pTar.contentDocument.body.offsetWidth + FFextraHeight;
+                } else if (pTar.Document && pTar.Document.body.scrollHeight) {
+                    //ie5+ syntax
+                    pTar.height = pTar.Document.body.scrollHeight;
+                }
+            }
+        }
+    </script>
+
+
+</head>
+<body style="height: 100%;width: 100%" onload="role();">
+<div style="height: 600px">
+    <div id="navigator" style="margin:0 auto;border:1px solid #000;height: 100%;">
+        <div style="text-align: center">
+            <a th:href="@{/course/listStudy/{uid}(uid=${users.getUid()})}"  target="contentFrame1" id="study">我选的课</a>
+        </div>
+        <div style="text-align: center ; display: none" id="teach">
+            <a th:href="@{/course/listTeach/{uid}(uid=${users.getUid()})}" class="active" target="contentFrame1">我教的课</a>
+        </div>
+        <div style="text-align: center">
+            <a th:href="@{/course/listAll/{uid}(uid=${users.getUid()})}" class="active" target="contentFrame1">全部课程</a>
+        </div>
+        <div style="text-align: center ; display: none" id="add">
+            <a th:href="@{/course/toAdd/{uid}(uid=${users.uid})}" class="active" target="contentFrame1">开设课程</a>
+        </div>
+    </div>
+    <div id="content">
+        <iframe id="contentFrame1" onload = "this.height=10" width=100% scrolling=no name="contentFrame1" on
+                allowtransparency="true" th:src="@{/welcome.html}">
+        </iframe>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script>
+    function role() {
+        var teach = document.getElementById("teach");
+        var add = document.getElementById("add");
+        if ([[${users.role}]]== 1) {
+            teach.style.display = "block";
+            add.style.display = "block";
+        }
+    }
+</script>
+
+<!--使iframe的div跟随之中的页面大小变大变小-->
+<script  th:inline="javascript">
+    function reinitIframe() {
+        var iframe = document.getElementById("contentFrame1");
+        try {
+            var bHeight = iframe.contentWindow.document.body.scrollHeight;
+            var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+            var height = Math.max(bHeight, dHeight);
+            iframe.height = height;
+        } catch (ex) {}
+    }
+    window.setInterval("reinitIframe()", 200);
+</script>
+
+</body>
+</html>

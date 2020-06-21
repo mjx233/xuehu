@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.soft.xuehu.mapper.NusersMapper">
+    <!-- SQL片段 -->
+    <sql id="cols">nuNo,
+        uid,
+        nid,
+        state
+    </sql>
+    <!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+    <resultMap type="com.soft.xuehu.entity.Nusers" id="nusersRM">
+        <!-- 主键映射 -->
+        <id property="nuNo" column="nu_no"/>
+        <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+        <result property="uid" column="uid"/>
+        <result property="nid" column="nid"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <insert id="addNusers" parameterType="com.soft.xuehu.entity.Nusers" useGeneratedKeys="true" keyProperty="nu_no">
+        insert into nusers (uid,nid,state) values(#{uid},#{nid},#{state})
+    </insert>
+
+    <select id="selectNusers" resultType="com.soft.xuehu.entity.Nusers" parameterType="int" resultMap="nusersRM">
+    select * from nusers where nid = #{nid}
+    </select>
+
+
+    <select id="select" resultType="com.soft.xuehu.entity.Nusers" resultMap="nusersRM">
+    select * from nusers where nid = #{arg0} and uid = #{arg1}
+    </select>
+
+    <update id="updateNusers" parameterType="com.soft.xuehu.entity.Nusers" >
+    update nusers set uid = #{uid},nid = #{nid},state = #{state} where  nu_no = #{nuNo}
+    </update>
+
+    <!-- 删除一份通知 -->
+    <delete id="removeNuno" parameterType="int">
+        delete from nusers
+        where nu_no = #{nuNo}
+    </delete>
+    <!-- 删除一份通知 -->
+    <delete id="remove" parameterType="int">
+        delete from nusers
+        where nid = #{nid}
+    </delete>
+
+
+    <select id="selectByUid" parameterType="string" resultType="com.soft.xuehu.entity.Nusers" resultMap="nusersRM">
+    select * from nusers where uid = #{uid}
+    </select>
+
+</mapper>

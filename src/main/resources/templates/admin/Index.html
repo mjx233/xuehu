@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>后台管理系统</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/admin-all.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/base.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/ui-lightness/jquery-ui-1.8.22.custom.css}">
+    <script type="text/javascript" th:src="@{/js/admin/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/jquery-ui-1.8.22.custom.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/index.js}"></script>
+
+</head>
+<body>
+    <div class="warp">
+        <!--头部开始-->
+        <div class="top_c">
+            <div class="top-nav">欢迎您，[[${users.uname}]]&nbsp;&nbsp;<a th:href="@{/users/preupdate/{uid}(uid=${users.uid})}" target="Conframe">修改个人信息</a> | <a th:href="@{/security/logout/{uid}(uid=${users.uid})}">安全退出</a></div>
+        </div>
+        <!--头部结束-->
+        <!--左边菜单开始-->
+        <div class="left_c left">
+            <h1>系统操作菜单</h1>
+            <div class="acc">
+                <div>
+                    <a class="one" th:href="@{/users/listAll}" target="Conframe">用户管理</a>
+<!--                    <ul class="kid">
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/Template/find-form.html}">表单样式</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/Template/find-alert.html}">弹出窗口</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/Template/find-order.html}">查询排序</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/Template/find-1.html}">查询结果一</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/Template/find-2.html}">查询结果二</a></li>
+                    </ul>-->
+                </div>
+                <div>
+                    <a class="one">课程模块</a>
+                    <ul class="kid">
+                        <li><b class="tip"></b><a  th:href="@{/course/listAll/{uid}(uid=${users.getUid()})}" target="Conframe">课程管理</a></li>
+                        <li><b class="tip"></b><a  th:href="@{/cuser/listStu}" target="Conframe">选修管理</a></li>
+                    </ul>
+<!--                    <ul class="kid">
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/templates/Maintain-add.html}">增加</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/templates/Maintain-edit.html}">修改</a></li>
+                        <li><b class="tip"></b><a target="Conframe" th:href="@{/templates/Maintain-del.html}">删除</a></li>
+                    </ul>-->
+                </div>
+                <div>
+                    <a class="one" th:href="@{/hwork/list}" target="Conframe">作业管理</a>
+                </div>
+                <div>
+                    <a class="one" th:href="@{/notice/list}" target="Conframe">通知管理</a>
+                </div>
+                <div id="datepicker"></div>
+            </div>
+
+        </div>
+        <!--左边菜单结束-->
+        <!--右边框架开始-->
+        <div class="right_c">
+            <div class="nav-tip" onclick="javascript:void(0)">&nbsp;</div>
+
+        </div>
+        <div class="Conframe">
+            <iframe name="Conframe" id="Conframe"></iframe>
+        </div>
+        <!--右边框架结束-->
+
+        <!--底部开始-->
+        <div class="bottom_c">Copyright &copy;2020 “学乎”在线学习系统</div>
+        <!--底部结束-->
+    </div>
+
+    <script  th:inline="javascript">
+
+        $("logout").click(function () {
+
+            if(confirm('您真的要离开系统吗？')){
+                $(location).attr("href",this.href());
+            }
+            return false;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>上传作业问题</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <script th:src="@{/laydate/laydate.js}"></script>
+</head>
+
+<body onload="a()">
+<p th:value="${exceptionMessage}"></p>
+<form th:action="@{/hworkQuestion/add}" th:object="${hworkQuestion}" method="post"  class="form-horizontal" role="form">
+    <div class="form-group" style="display: none;">
+        <label for="hid" class="col-sm-2 control-label">作业Id</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="hid"  name="hid"
+                   th:value="*{hid}">
+        </div>
+    </div>
+    <div class="form-group" style="display: none;">
+        <label for="courseNo" class="col-sm-2 control-label">课程id</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="courseNo" name="courseNo"
+                   th:value="*{courseNo}" >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="questionNo" class="col-sm-2 control-label">问题编号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="questionNo" name="questionNo"
+                   placeholder="请输入问题编号" >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="question" class="col-sm-2 control-label">问题</label>
+        <div class="col-sm-10">
+            <textarea  rows="10" cols="60" id="question" name="question"
+                       placeholder="请输入问题内容" ></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="answer" class="col-sm-2 control-label">标准答案</label>
+        <div class="col-sm-10">
+            <textarea  rows="10" cols="60" id="answer" name="answer"
+                                   placeholder="请输入答案" ></textarea>
+        </div>
+    </div>
+    <div class="form-group" >
+        <label for="grade" class="col-sm-2 control-label">满分：</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="grade" name="grade">
+        </div>
+    </div>
+    <div class="form-group" style="display: none;" >
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="uid" name="uid" th:value="*{uid}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input  type="submit" value="提交"/>
+        </div>
+    </div>
+</form>
+
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+
+</body>
+</html>

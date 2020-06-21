@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>通知</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/notice.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div>
+    <p>
+        <a th:href="@{/notice/listAll/(courseNo=${notice.courseNo},uid=${users.uid})}"  class="active"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a>
+    </p>
+</div>
+
+<div class="my_msg_list">
+    <div class="my_msg_list_view">
+        <div class="my_msg_list_box">
+            <div class="my_msg_list_con">
+                <div class="my_msg_list_title">
+                    <span th:text="${notice.title}"></span>
+                    <a class="fr" th:if="${users.uid}!=${notice.uid}" th:href="@{/notice/state/(nid=${notice.nid},uid=${users.uid})}">标记为已读</a>
+                    &nbsp;
+                    <!--学生删除通知记录-->  <p th:if="${users.uid}!=${notice.uid}"><a class="fr" th:href="@{/notice/Sremove/(nid=${notice.nid},uid=${users.uid},courseNo=${notice.courseNo})}"><img height="20px" width="20px" th:src="@{/img/delete.jpg}"></a></p>
+                    <!--教师删除通知-->  <p th:if="${users.uid}==${notice.uid}"><a class="fr" th:href="@{/notice/Tremove/(nid=${notice.nid},uid=${users.uid},courseNo=${notice.courseNo})}"><img height="20px" width="20px" th:src="@{/img/delete.jpg}"></a></p>
+                </div>
+                <div class="msg_list"><!---->
+                    <ul class="msg_list_ul">
+                        <li class="msg_list_ul_li">
+                            <span class="msg_type " th:text="'发布人：'+${name}"></span>
+                            <div class="fr options_info options-f">
+                                <div style="float: right;padding-right:10px" th:text="${#dates.format(notice.startTime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                            </div>
+                            <div class="msg_content ">
+                                <div th:text="${notice.nMessage}"></div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

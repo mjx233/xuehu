@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>课程</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}">
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div>
+    <div style="position:relative;left: 30px;top: 10px;font-size: 20px;solid-color: #00FFFF" >[[${course.cname}]](课程编号：[[${course.courseNo}]])</div>
+    <div style = "float: right; position: relative;right: 50px;" >
+        <a th:href="@{/hwork/listAll/(courseNo=${course.courseNo},uid=${uid})}" class="active" th:if="${users.role!=2}">作业</a>&nbsp;&nbsp;&nbsp;
+        <a th:href="@{/notice/listAll/(courseNo=${course.courseNo},uid=${users.uid})}"  class="active" th:if="${users.role!=2}">通知</a>&nbsp;&nbsp;&nbsp;
+        <hr>
+    </div>
+</div>
+<div style="position:relative; left: 40px;top: 40px">
+    <table style="border:1px solid #ccc;" >
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+        <tr th:each="course,infoStat:${courseList}" height="30px">
+            <td th:if="${course.ml == 0}" th:text="'第'+${course.zj}+'章'+'&nbsp;&nbsp;&nbsp;&nbsp;'" nowrap style="font-size: 20px; font-weight: bold "></td>
+            <td th:text="${course.zjMessage}" nowrap style="font-size: 20px; font-weight: bold "></td>
+            <td th:if="${course.ml> 0}" th:text="${course.zj}+'.'+${course.ml}+'&nbsp;&nbsp;'" nowrap style="font-size: 15px; font-weight: normal; text-align: right" id="num"></td>
+            <td nowrap style="font-size: 15px; font-weight: normal "><a th:href="@{/course/video/(cid=${course.cid},uid=${uid})}" th:text="${course.mlMessage}"></a></td>
+            <!--<td><a class="update" th:href="@{/course/video/(cid=${course.cid},ml=${course.ml},zj=${course.zj})}" >打开</a></td>-->
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+    </table>
+    <div class="layui-input-inline">
+        <a th:href="@{/course/list_zjml_update/(courseNo=${course.courseNo},uid=${users.uid})}"><button type="button" th:if="${course.teacher == users.uname and users.role!=2}" class="layui-btn layui-btn-primary layui-btn-radius">修改</button></a>
+        <a th:href="@{/course/toInput_zjml/(courseNo=${course.courseNo},uid=${users.uid})}"><button type="button" th:if="${course.teacher == users.uname and users.role!=2}" class="layui-btn layui-btn-primary layui-btn-radius">增加</button></a>
+        <a th:href="@{/course/upload_zjml/(courseNo=${course.courseNo},uid=${users.uid})}"><button type="button" th:if="${course.teacher == users.uname and users.role!=2}" class="layui-btn layui-btn-primary layui-btn-radius">上传</button></a>
+        <a th:href="@{/course/export/goods/{courseNo}(courseNo=${course.courseNo})}"><button type="button" th:if="${course.teacher == users.uname and users.role!=2}" class="layui-btn layui-btn-primary layui-btn-radius">下载</button></a>
+    </div>
+</div>
+<br>
+<br>
+
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+
+</body>
+</html>

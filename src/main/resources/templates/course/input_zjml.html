@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增章节目录</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body style="padding:8px;">
+<p><a th:href="@{/course/list_zjml/(courseNo=${course.courseNo},uid=${uid})}" style="color: #01AAED"><img height="70px" width="70px" th:src="@{/img/turn2.jpg}"></a></p>
+<h1 class="title">新增章节目录</h1>
+<form th:action="@{/course/add_zjml}" method="post"  enctype="multipart/form-data" th:object="${course}">
+    <div class="form-group" style="display: none">
+        <label for="cid" class="col-sm-2 control-label">课程名</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="cid"  name="cid"
+                   th:value="*{cid}">
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="cname" class="col-sm-2 control-label">课程名</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="cname"  name="cname"
+                   th:value="*{cname}">
+        </div>
+    </div>
+    <div class="form-group" >
+        <label for="zj" class="col-sm-2 control-label">章节号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="zj" name="zj"
+                   oninput = "value=value.replace(/[^\d]/g,'')" th:value="*{zj}">
+        </div>
+    </div>
+    <div class="form-group" >
+        <label for="ml" class="col-sm-2 control-label">目录号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="ml" name="ml"
+                   oninput = "value=value.replace(/[^\d]/g,'')" th:value="*{ml}">
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="cMessage" class="col-sm-2 control-label">课程简介</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="cMessage" name="cMessage"
+                   th:value="*{cMessage}" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="video" class="col-sm-2 control-label">视频</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="video" name="video"
+                   th:value="*{video}" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="zjMessage" class="col-sm-2 control-label">章节内容</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="zjMessage" name="zjMessage"
+                    >
+        </div>
+    </div>
+    <div class="form-group" >
+        <label for="mlMessage" class="col-sm-2 control-label">目录内容</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="mlMessage" name="mlMessage"
+                   >
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="teacher" class="col-sm-2 control-label">教师名</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="teacher" name="teacher"
+                   th:value="*{teacher}">
+        </div>
+    </div>
+    <div class="form-group" STYLE="display: none">
+        <label for="courseNo" class="col-sm-2 control-label">课程编号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="courseNo" name="courseNo"
+                   th:value="*{courseNo}">
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="pic1" class="col-sm-2 control-label">课程图片</label>
+        <div class="col-sm-10">
+            <input type="file" class="form-control" id="pic1" name="pic1" size="40"
+                   th:value="*{pic}">
+        </div>
+    </div>
+    <div class="form-group" style="display: none">
+        <label for="uid" class="col-sm-2 control-label">用户id</label>
+        <div class="col-sm-10">
+            <input type="text"  class="form-control" id="uid" name="uid" size="40" th:value="${users.uid}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input  type="submit" value="提交"/>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</html>
